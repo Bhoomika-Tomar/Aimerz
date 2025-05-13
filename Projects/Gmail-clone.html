@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gmail UI Clone</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background-color: #f3f4f6;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem 1rem;
+      background-color: white;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar .left,
+    .navbar .right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .search-bar {
+      display: flex;
+      align-items: center;
+      background-color: #f3f4f6;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      width: 50%;
+      max-width: 32rem;
+    }
+
+    .search-bar input {
+      border: none;
+      background: transparent;
+      outline: none;
+      width: 100%;
+    }
+
+    .container {
+      display: flex;
+    }
+
+    .sidebar {
+      width: 16rem;
+      background-color: white;
+      height: 100vh;
+      padding: 1rem;
+      box-shadow: 1px 0 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .compose-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background-color: #ef4444;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 9999px;
+      border: none;
+      cursor: pointer;
+      margin-bottom: 1.5rem;
+    }
+
+    .compose-btn:hover {
+      background-color: #dc2626;
+    }
+
+    .sidebar-option {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.5rem;
+      border-radius: 0.375rem;
+      cursor: pointer;
+      color: #374151;
+    }
+
+    .sidebar-option:hover {
+      background-color: #f3f4f6;
+    }
+
+    .main-content {
+      flex: 1;
+      padding: 1.5rem;
+    }
+
+    .email-list {
+      margin-top: 2rem;
+    }
+
+    .email-row {
+      display: flex;
+      align-items: center;
+      background-color: white;
+      padding: 0.75rem;
+      border-radius: 0.5rem;
+      margin-bottom: 0.5rem;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      transition: box-shadow 0.2s;
+    }
+
+    .email-row:hover {
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .email-options {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      width: 15%;
+    }
+
+    .email-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      padding-left: 1rem;
+    }
+
+    .email-title {
+      font-weight: 600;
+      color: #1f2937;
+      width: 20%;
+    }
+
+    .email-message {
+      color: #4b5563;
+      width: 55%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .email-time {
+      color: #6b7280;
+      font-size: 0.875rem;
+      width: 15%;
+      text-align: right;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <!-- Left -->
+    <div class="left">
+      <i class="fas fa-bars text-xl text-gray-600 cursor-pointer"></i>
+      <img src="https://i.pinimg.com/originals/ae/47/fa/ae47fa9a8fd263aa364018517020552d.png" class="h-10" alt="Logo" height="40" />
+    </div>
+
+    <!-- Search -->
+    <div class="search-bar">
+      <i class="fas fa-search text-gray-500 mr-2"></i>
+      <input type="text" placeholder="Search mail" />
+      <span class="material-icons text-gray-500 cursor-pointer">arrow_drop_down</span>
+    </div>
+
+    <!-- Right -->
+    <div class="right">
+      <span class="material-icons cursor-pointer text-gray-600">apps</span>
+      <span class="material-icons cursor-pointer text-gray-600">notifications</span>
+      <span class="material-icons cursor-pointer text-gray-600">account_circle</span>
+    </div>
+  </div>
+
+  <!-- Main Layout -->
+  <div class="container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <button class="compose-btn">
+        <span class="material-icons">add</span> Compose
+      </button>
+
+      <div class="sidebar-option"><span class="material-icons">inbox</span> Inbox</div>
+      <div class="sidebar-option"><span class="material-icons">star</span> Starred</div>
+      <div class="sidebar-option"><span class="material-icons">access_time</span> Snoozed</div>
+      <div class="sidebar-option"><span class="material-icons">send</span> Sent</div>
+      <div class="sidebar-option"><span class="material-icons">note</span> Notes</div>
+      <div class="sidebar-option"><span class="material-icons">expand_more</span> More</div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <h2 class="text-xl font-semibold text-gray-700">Welcome to Gmail UI</h2>
+      <p class="text-gray-500">This is just a front-end clone using internal CSS.</p>
+
+      <!-- Email List -->
+      <div class="email-list">
+        <!-- Email Row 1 -->
+        <div class="email-row">
+          <div class="email-options">
+            <input type="checkbox">
+            <span class="material-icons">star_border</span>
+            <span class="material-icons">label_important</span>
+          </div>
+          <div class="email-content">
+            <h3 class="email-title">Aimerz</h3>
+            <p class="email-message">Welcome to Gmail UI - this is a message preview area</p>
+            <span class="email-time">12:34 PM</span>
+          </div>
+        </div>
+
+        <!-- Email Row 2 -->
+        <div class="email-row">
+          <div class="email-options">
+            <input type="checkbox">
+            <span class="material-icons">star_border</span>
+            <span class="material-icons">label_important</span>
+          </div>
+          <div class="email-content">
+            <h3 class="email-title">Google</h3>
+            <p class="email-message">Your security alert - someone tried to sign in</p>
+            <span class="email-time">9:21 AM</span>
+          </div>
+        </div>
+
+        <!-- Email Row 3 -->
+        <div class="email-row">
+          <div class="email-options">
+            <input type="checkbox">
+            <span class="material-icons">star_border</span>
+            <span class="material-icons">label_important</span>
+          </div>
+          <div class="email-content">
+            <h3 class="email-title">YouTube</h3>
+            <p class="email-message">New videos based on your interests</p>
+            <span class="email-time">Yesterday</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>
