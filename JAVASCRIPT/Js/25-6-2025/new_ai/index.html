@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chatbot</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <div class="logo-container">
+                <img src="./logo.png" alt="AimerzLogo" class="logo">
+                <h1>Aimerz</h1>
+            </div>
+            <div class="header-actions" id="themeToggle">
+                <button>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="messages-area" id="messagesArea"></div>
+        <div class="input-container">
+            <div class="file-upload" id="fileUpload">
+                <input type="file" id="imageInput" accept="image/*">
+                <label for="imageInput" class="upload-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M23 19a2 2 0 0 1-2 2h-5v-3h-4v3H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z">
+                        </path>
+                        <polyline points="12 3 12 11 15 8 12 5"></polyline>
+                    </svg>
+                </label>
+                <img id="previewImage" class="preview-image" altpreviewImage>
+            </div>
+            <input type="text" id="messageInput" placeholder="message AImerz...">
+            <button id="sendButton">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                </svg>
+            </button>
+        </div>
+    </div>
+    <script>
+        const API_KEY="AIzaSyCJV6QNRZnxtrQTJGetSiNI4NfwTqGM6bo";
+        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${API_KEY}`;
+const IMAGE_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro-vision:generateContent?key=${API_KEY}`;
+
+//Dom Elements
+const messagesArea=document.getElementById('messagesArea');
+const messageInput=document.getElementById('messageInput');
+const sendButton=document.getElementById('sendButton');
+const imageInput=document.getElementById('imageInput');
+const previewImage=document.getElementById('previewImage');
+const currentImageFile=null;
+
+//theme toggle
+const themeToggle=document.getElementById('themeToggle');
+const body=document.body;
+themeToggle.addEventListener('click',()=>{
+    const currentTheme=body.classList.contains('dark-theme')?"dark":"light"
+    const newTheme=currentTheme==="dark"?"light":"dark";
+    body.classList.remove(`${currentTheme}-theme`);
+    body.classList.add(`${newTheme}-theme`);
+
+
+    //save theme in local storage
+    localStorage.setItem("aimerz-theme",newTheme);
+    });
+
+    //message creation functions
+  
+    async function sendMessage(){
+        console.log("send message");
+        
+        const message=messageInput.value.trim();
+        if(!message && !currentImageFile) return;
+
+        //user message
+        const userMessageElement=createMessageElement(message,"user-message");
+        messagesArea.appendChild(userMessageElement);
+
+        //lodiang indicator
+        const loadingElement=createLodingElement();
+
+
+
+    }
+    function createLodingElement(){
+        
+    }
+    
+    function createMessageElement(content,type){
+        const messageDiv=document.createElement("div");
+        messageDiv.classList.add("message",type);
+        messageDiv.textContent=content;
+        return messageDiv;
+    }
+
+
+    sendButton.addEventListener('click',sendMessage);
+
+
+    </script>
+</body>
+
+</html>

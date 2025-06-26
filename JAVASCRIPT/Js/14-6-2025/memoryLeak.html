@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button onclick="createLeak()">Create Leak</button>
+    <p><button onclick="createLeak()">Cleanup</button></p>
+    <script>
+        const leakArray=[];
+        function createLeak(){
+            const element=document.createElement('div');
+            element.innerText="Leaky element";
+            document.body.appendChild(element);
+
+            document.body.removeChild(element);
+            leakArray.push(element);
+            console.log("leaky array length: ",leakArray.length);
+            
+        }
+        function cleanUp(){
+            leakArray.length=0;
+            console.log('cleaniung done');
+            
+        }
+    </script>
+</body>
+</html>

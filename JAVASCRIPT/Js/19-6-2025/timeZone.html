@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>World Time Zones</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #1e3c72, #2a5298);
+      color: white;
+      text-align: center;
+      padding: 20px;
+      margin: 0;
+    }
+
+    h1 {
+      margin-bottom: 30px;
+    }
+
+    .clock-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    .clock-card {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid #ffffff33;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      backdrop-filter: blur(4px);
+      transition: transform 0.3s ease;
+    }
+
+    .clock-card:hover {
+      transform: scale(1.05);
+    }
+
+    .clock-card h2 {
+      margin-bottom: 10px;
+      font-size: 1.4em;
+    }
+
+    .clock-card p {
+      font-size: 1.2em;
+      margin: 0;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>🌐 World Time Zones</h1>
+  <div class="clock-container" id="clockContainer"></div>
+
+  <script>
+    const timeZones = [
+      { id: "india", timeZone: "Asia/Kolkata", label: "🇮🇳 India" },
+      { id: "usa", timeZone: "America/New_York", label: "🇺🇸 USA (New York)" },
+      { id: "uk", timeZone: "Europe/London", label: "🇬🇧 UK (London)" },
+      { id: "australia", timeZone: "Australia/Sydney", label: "🇦🇺 Australia (Sydney)" },
+      { id: "japan", timeZone: "Asia/Tokyo", label: "🇯🇵 Japan (Tokyo)" },
+      { id: "brazil", timeZone: "America/Sao_Paulo", label: "🇧🇷 Brazil (São Paulo)" }
+    ];
+
+    const container = document.getElementById('clockContainer');
+
+    // Create clock cards dynamically
+    timeZones.forEach(zone => {
+      const card = document.createElement('div');
+      card.className = 'clock-card';
+      card.id = zone.id;
+      card.innerHTML = `<h2>${zone.label}</h2><p>Loading...</p>`;
+      container.appendChild(card);
+    });
+
+    function updateTime() {
+      const options = {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true
+      };
+
+      timeZones.forEach(zone => {
+        const now = new Date().toLocaleTimeString("en-US", {
+          timeZone: zone.timeZone,
+          ...options
+        });
+        const card = document.getElementById(zone.id);
+        card.querySelector('p').textContent = now;
+      });
+    }
+
+    // Initial update and set interval
+    updateTime();
+    setInterval(updateTime, 1000);
+  </script>
+</body>
+</html>

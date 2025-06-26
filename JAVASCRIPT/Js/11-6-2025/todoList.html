@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        input[type="text"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        button {
+            padding: 10px 15px;
+            background-color: #ff5733;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #c70039;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            background-color: #eaeaea;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 3px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        li button {
+            background-color: #ff5733;
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        li button:hover {
+            background-color: #c70039;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>To-Do List</h1>
+        <input type="text" id="new-task" placeholder="Add anew Task">
+        <button onclick="addTask()">Add Task</button>
+        <input type="text" id="seacrh-tasks" placeholder="search Task here" oninput="searchTasks()">
+        <ul id="task-list">
+
+        </ul>
+    </div>
+
+
+    <script>
+        let tasks = [];
+
+        function addTask() {
+            const task = document.getElementById('new-task').value;
+            // console.log(task);
+            tasks.push(task);
+            console.log(tasks);
+            displayTasks();
+
+
+        }
+        function displayTasks(filteredTask = tasks) {
+            const taskList = document.getElementById('task-list');
+            taskList.innerHTML = " ";
+            filteredTask.forEach((data, index) => {
+                const listeItem = document.createElement('li');
+                const removeButton = document.createElement('button');
+                console.log(listeItem);
+
+                listeItem.textContent = data;
+                removeButton.textContent = 'Remove';
+                removeButton.onclick = () => removeTask(index);
+                listeItem.appendChild(removeButton);
+                console.log(listeItem);
+                taskList.appendChild(listeItem);
+            })
+        }
+
+        function removeTask(index) {
+            tasks.splice(index, 1);
+            displayTasks();
+        }
+
+        function searchTasks() {
+            const searchTerm = document.getElementById('seacrh-tasks').value.toLowerCase();
+            const filteredTasks = tasks.filter(task => task.toLowerCase().includes(searchTerm));
+            console.log(filteredTasks);
+
+            displayTasks(filteredTasks)
+        }
+    </script>
+</body>
+
+</html>

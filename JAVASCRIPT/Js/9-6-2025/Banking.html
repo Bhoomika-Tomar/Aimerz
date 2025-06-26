@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ATM ₹100 Withdrawal</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f1f1f1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .atm-container {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      text-align: center;
+      width: 300px;
+    }
+    input[type="number"] {
+      width: 80%;
+      padding: 8px;
+      margin: 10px 0;
+      font-size: 16px;
+    }
+    button {
+      padding: 10px 20px;
+      background: #2c7a7b;
+      color: white;
+      border: none;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .result {
+      margin-top: 15px;
+      font-size: 18px;
+      color: #333;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+
+<div class="atm-container">
+  <h2>ATM Withdrawal</h2>
+  <input type="number" id="amountInput" placeholder="Enter amount (₹100+)" />
+  <br />
+  <button onclick="withdraw()">Withdraw</button>
+  <div class="result" id="result"></div>
+</div>
+
+<script>
+  function withdrawNotes(amount) {
+    if (amount < 100 || amount % 100 !== 0) {
+      return "Invalid amount. Enter multiples of ₹100 only.";
+    }
+
+    let count = 0;
+    while (amount >= 100) {
+      amount -= 100;
+      count++;
+    }
+
+    return `You will receive ${count} ₹100 notes.`;
+  }
+
+  function withdraw() {
+    const input = document.getElementById("amountInput");
+    const resultDiv = document.getElementById("result");
+    const amount = parseInt(input.value);
+
+    if (isNaN(amount)) {
+      resultDiv.innerHTML = "<span class='error'>Please enter a valid number.</span>";
+      return;
+    }
+
+    const message = withdrawNotes(amount);
+
+    if (message.startsWith("Invalid")) {
+      resultDiv.innerHTML = `<span class='error'>${message}</span>`;
+    } else {
+      resultDiv.innerHTML = message;
+    }
+  }
+</script>
+
+</body>
+</html>

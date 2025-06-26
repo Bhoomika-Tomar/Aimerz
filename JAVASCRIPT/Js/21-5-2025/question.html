@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <h1>Electricity Bill Categorizer</h1>
+    <script>
+        
+let totalunit=0;
+let totalCost=0;
+
+for(let house=1;house<=5;house++){
+    let units=parseInt(prompt("Enter units for house")+house+":");
+    let metereStatus=prompt("enter meter status for house "+house+("(OK/Faulty):"));
+    if(metereStatus!=="Ok"){
+        console.log("House"+house+": meter falt-data skipped");
+        
+    }
+    else{
+        if(units>=0 && units<=100){
+            console.log("House "+house+ "Low usage");
+            totalunit+=units;
+            totalCost+=units*10;
+        } else if(units>100 && units<=300){
+            
+            totalunit+=units;
+            totalCost+=((units-100)*30+100*10);
+            console.log("House X: Moderate Usage");
+            console.log(`Total cost is :${totalCost} for ${totalunit} units`);
+            
+            
+        }
+    }
+}
+
+    </script>
+</body>
+</html>

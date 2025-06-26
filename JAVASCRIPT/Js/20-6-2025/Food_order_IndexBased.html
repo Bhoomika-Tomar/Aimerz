@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+     <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f7f7f7;
+    }
+    nav {
+      background-color: #ff6f61;
+      padding: 1rem 2rem;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    nav h2 {
+      margin: 0;
+    }
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 2rem;
+    }
+    .card {
+      background: white;
+      border-radius: 10px;
+      margin: 1rem;
+      width: 250px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      overflow: hidden;
+      transition: 0.3s;
+    }
+    .card:hover {
+      transform: scale(1.03);
+    }
+    .card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+    .card-body {
+      padding: 1rem;
+    }
+    .card-body h3 {
+      margin: 0.5rem 0;
+      font-size: 1.2rem;
+    }
+    .card-body p {
+      font-size: 0.9rem;
+      color: #555;
+    }
+    .card-body button {
+      background: #ff6f61;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+    .cart-section {
+      padding: 2rem;
+      background-color: #fff0e6;
+    }
+    #cart-list {
+      list-style-type: none;
+      padding-left: 0;
+    }
+  </style>
+</head>
+<body>
+    <nav>
+        <h2>🥣TastyBites</h2>
+        <p>Delicious Food Delivery System</p>
+    </nav>
+
+    <header style="text-align: center;">
+        <h1>Welcome to TastyBites</h1>
+        <p>OPrder your favourite meal anytime, anywhere!</p>
+    </header>
+    <div class="container" id="food_container"></div>
+    <div class="cart-section">
+        <h2>🛒 Your Cart</h2>
+        <ul id="cart-list"></ul>
+        <h3>Total: $<span id="total_price">0</span></h3>
+        <button onclick="checkout()">Place Order</button>
+    </div>
+
+    <script>
+        const foodContainer=document.getElementById('food_container');
+        const cartList=document.getElementById('cart-list');
+        const totalPrice=document.getElementById('total_price');
+        let FoodList=[];
+        let cart=[];
+        function fetchFood(){
+            fetch('https://api.npoint.io/cf6bad11c8daa613a2cf')
+            .then(response=>response.json())
+            .then(foodItems=>{
+                FoodList=foodItems;
+                console.log(foodItems);
+                
+                displayFood(foodItems)
+            })
+            .catch(err=>{
+                foodContainer.innerHTML="<p>Failed to load food items</p>";
+                console.error(err);
+            })
+        }
+
+        function displayFood(items){
+            foodContainer.innerHTML="";
+            items.forEach((food,index)=>{
+                const card=document.createElement('div');
+                card.className="card";
+                card.innerHTML=`
+                <img src=${food.image} alt=${food.name}/>
+                <div class="card-body">
+                    <h3>${food.name}</h3>
+                    <p>${food.description}</p>
+                    <strong>$${food.price}</strong>
+                    <button class="add-btn" data-index="${index}">Add To Cart</button>
+                </div>
+                `;
+                console.log("Food",food);
+                console.log("json stringify",JSON.stringify(food));
+                
+                
+                foodContainer.appendChild(card);
+            });
+            document.querySelectorAll('.add-btn').forEach(btn=>{
+                btn.addEventListener('click',function(){
+                    const index=this.dataset.index;
+                    addToCart(FoodList[index])
+                })
+            })
+        }
+
+        function addToCart(item){
+            console.log('item',item);
+            
+            cart.push(item);
+            updateCart();
+
+        }
+        function updateCart(){
+            console.log(cart);
+            
+            cartList.innerHTML="";
+            let total=0;
+            cart.forEach((item,index)=>{
+                total+=item.price;
+                const li=document.createElement('li');
+                li.textContent=`${item.name}-$${item.price}`;
+                cartList.appendChild(li)
+            });
+            totalPrice.textContent=total.toFixed(2);
+        }
+        fetchFood();
+    </script>
+</body>
+</html>

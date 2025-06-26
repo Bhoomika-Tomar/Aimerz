@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Birthday Countdown & Age Tracker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f9ff;
+      padding: 2rem;
+      color: #333;
+    }
+
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    input {
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      padding: 0.6rem;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #2980b9;
+    }
+
+    .card {
+      background: #ecf9ff;
+      border-left: 4px solid #3498db;
+      padding: 1rem;
+      margin-top: 1rem;
+      border-radius: 5px;
+    }
+
+    .average-age {
+      margin-top: 1rem;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🎂 Birthday Countdown & Age Tracker</h1>
+
+  <div class="container">
+    <form id="birthdayForm">
+      <input type="text" id="name" placeholder="Enter name" required />
+      <input type="date" id="birthday" required />
+      <button type="submit">Add Person</button>
+    </form>
+
+    <div id="results"></div>
+    <p class="average-age" id="averageAge"></p>
+  </div>
+
+  <script>
+    const form = document.getElementById('birthdayForm');
+    const results = document.getElementById('results');
+    const avgAgeDisplay = document.getElementById('averageAge');
+    const people = [];
+
+    function calculateAge(birthdayStr) {
+      const today = new Date();
+      const birthDate = new Date(birthdayStr);
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const m = today.getMonth() - birthDate.getMonth();
+
+      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+      }
+      return age;
+    }
+
+    function daysUntilBirthday(birthdayStr) {
+      const today = new Date();
+      const birthDate = new Date(birthdayStr);
+      const nextBirthday = new Date(today.getFullYear(), birthDate.getMonth(), birthDate.getDate());
+
+      if (nextBirthday < today) {
+        nextBirthday.setFullYear(today.getFullYear() + 1);
+      }
+
+      const diffTime = nextBirthday - today;
+      return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    }
+
+    function updateDisplay() {
+      results.innerHTML = "";
+
+      const processed = people.map(p => ({
+        name: p.name,
+        age: calculateAge(p.birthday),
+        daysUntilBirthday: daysUntilBirthday(p.birthday)
+      }));
+
+      // Sort by upcoming birthday
+      processed.sort((a, b) => a.daysUntilBirthday - b.daysUntilBirthday);
+
+      // Display each person
+      processed.forEach(p => {
+        const card = document.createElement('div');
+        card.className = "card";
+        card.innerHTML = `<strong>${p.name}</strong> is ${p.age} years old.<br>🎉 Birthday in ${p.daysUntilBirthday} day(s)!`;
+        results.appendChild(card);
+      });
+
+      // Average age
+      const avgAge = processed.reduce((sum, p) => sum + p.age, 0) / processed.length;
+      avgAgeDisplay.textContent = `Average Age: ${avgAge.toFixed(1)} years`;
+    }
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById('name').value.trim();
+      const birthday = document.getElementById('birthday').value;
+
+      if (name && birthday) {
+        people.push({ name, birthday });
+        form.reset();
+        updateDisplay();
+      }
+    });
+  </script>
+</body>
+</html>

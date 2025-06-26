@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Birthday Countdown & Age Tracker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f9ff;
+      padding: 2rem;
+      color: #333;
+      overflow-x: hidden;
+    }
+
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: auto;
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      position: relative;
+      z-index: 1;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    input, button {
+      padding: 0.6rem;
+      border-radius: 5px;
+    }
+
+    input {
+      border: 1px solid #ccc;
+    }
+
+    button {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #2980b9;
+    }
+
+    .card {
+      background: #ecf9ff;
+      border-left: 4px solid #3498db;
+      padding: 1rem;
+      margin-top: 1rem;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .card img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #3498db;
+    }
+
+    .card-content {
+      flex-grow: 1;
+    }
+
+    .card-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .average-age {
+      margin-top: 1rem;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+
+    /* Flying balloons */
+    .balloon {
+      position: absolute;
+      width: 40px;
+      height: 60px;
+      background-color: #f39c12;
+      border-radius: 50% 50% 50% 50%;
+      animation: float 10s infinite ease-in;
+      z-index: 0;
+    }
+
+    .balloon::after {
+      content: '';
+      position: absolute;
+      bottom: -20px;
+      left: 50%;
+      width: 2px;
+      height: 20px;
+      background: #333;
+      transform: translateX(-50%);
+    }
+
+    @keyframes float {
+      0% { transform: translateY(100vh); }
+      100% { transform: translateY(-200px); }
+    }
+  </style>
+</head>
+<body>
+  <h1>🎂 Birthday Countdown & Age Tracker</h1>
+
+  <!-- Balloons -->
+  <div class="balloon" style="left: 10%; animation-delay: 1s;"></div>
+  <div class="balloon" style="left: 50%; animation-delay: 3s;"></div>
+  <div class="balloon" style="left: 80%; animation-delay: 5s;"></div>
+
+  <div class="container">
+    <form id="birthdayForm">
+      <input type="text" id="name" placeholder="Enter name" required />
+      <input type="date" id="birthday" required />
+      <input type="file" id="photo" accept="image/*" />
+      <button type="submit">Add Person</button>
+    </form>
+
+    <div id="results"></div>
+    <p class="average-age" id="averageAge"></p>
+  </div>
+
+  <script>
+    const form = document.getElementById('birthdayForm');
+    const results = document.getElementById('results');
+    const avgAgeDisplay = document.getElementById('averageAge');
+    const people = [];
+
+    function calculateAge(birthdayStr) {
+      const today = new Date();
+      const birthDate = new Date(birthdayStr);
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const m = today.getMonth() - birthDate.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+      }
+      return age;
+    }
+
+    function daysUntilBirthday(birthdayStr) {
+      const today = new Date();
+      const birthDate = new Date(birthdayStr);
+      const nextBirthday = new Date(today.getFullYear(), birthDate.getMonth(), birthDate.getDate());
+      if (nextBirthday < today) {
+        nextBirthday.setFullYear(today.getFullYear() + 1);
+      }
+      const diffTime = nextBirthday - today;
+      return {
+        days: Math.floor(diffTime / (1000 * 60 * 60 * 24)),
+        remainingTime: new Date(diffTime).toISOString().substr(11, 8) // hh:mm:ss
+      };
+    }
+
+    function updateDisplay() {
+      results.innerHTML = "";
+      const processed = people.map((p, index) => {
+        const age = calculateAge(p.birthday);
+        const { days, remainingTime } = daysUntilBirthday(p.birthday);
+        return { ...p, age, days, remainingTime, index };
+      });
+
+      processed.sort((a, b) => a.days - b.days);
+
+      processed.forEach(p => {
+        const card = document.createElement('div');
+        card.className = "card";
+
+        card.innerHTML = `
+          <img src="${p.image || 'https://via.placeholder.com/60'}" alt="Photo"/>
+          <div class="card-content">
+            <strong>${p.name}</strong> is ${p.age} years old.<br>
+            🎉 Birthday in ${p.days} day(s), Time left: ${p.remainingTime}
+          </div>
+          <div class="card-actions">
+            <button onclick="deletePerson(${p.index})">❌</button>
+            <button onclick="editPerson(${p.index})">✏️</button>
+          </div>
+        `;
+        results.appendChild(card);
+      });
+
+      const avgAge = processed.reduce((sum, p) => sum + p.age, 0) / processed.length;
+      avgAgeDisplay.textContent = `Average Age: ${avgAge.toFixed(1)} years`;
+    }
+
+    window.deletePerson = function(index) {
+      people.splice(index, 1);
+      updateDisplay();
+    }
+
+    window.editPerson = function(index) {
+      const person = people[index];
+      document.getElementById('name').value = person.name;
+      document.getElementById('birthday').value = person.birthday;
+      people.splice(index, 1);
+      updateDisplay();
+    }
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const name = document.getElementById('name').value.trim();
+      const birthday = document.getElementById('birthday').value;
+      const fileInput = document.getElementById('photo');
+      let image = "";
+
+      if (fileInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          image = e.target.result;
+          people.push({ name, birthday, image });
+          updateDisplay();
+        };
+        reader.readAsDataURL(fileInput.files[0]);
+      } else {
+        people.push({ name, birthday, image });
+        updateDisplay();
+      }
+
+      form.reset();
+    });
+  </script>
+</body>
+</html>

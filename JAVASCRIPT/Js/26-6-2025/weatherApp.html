@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+      <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      background: linear-gradient(-45deg, #74ebd5, #ACB6E5, #dfe9f3, #e0c3fc);
+      background-size: 400% 400%;
+      animation: gradient 10s ease infinite;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    @keyframes gradient {
+      0% { background-position: 0% 50% }
+      50% { background-position: 100% 50% }
+      100% { background-position: 0% 50% }
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(15px);
+      padding: 30px;
+      border-radius: 16px;
+      text-align: center;
+      width: 300px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      color: #fff;
+    }
+
+    input {
+      width: 70%;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      font-size: 16px;
+    }
+
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      background-color: #007BFF;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .weather {
+      margin-top: 20px;
+    }
+
+    .weather img {
+      width: 80px;
+    }
+
+    .temp {
+      font-size: 32px;
+      margin: 10px 0;
+    }
+
+    .desc {
+      font-size: 18px;
+      text-transform: capitalize;
+    }
+  </style>
+</head>
+<body>
+    
+<div class="card">
+    <h2>🌤️ Weather App</h2>
+    <input type="text" id="cityInput" placeholder="enter city name">
+    <button onclick="getWeather()">Get Weather</button>
+    <div class="weather" id="weatherInfo"></div>
+</div>
+    <script>
+        function getWeather(){
+            const city=document.getElementById('cityInput').value;
+            const apiKey="d80f280c9e256dcf041daa8984d9714a";
+            const url=`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
+            fetch(url)
+            .then(response=>response.json())
+            .then(data=>console.log(data))
+        }
+    </script>
+</body>
+</html>

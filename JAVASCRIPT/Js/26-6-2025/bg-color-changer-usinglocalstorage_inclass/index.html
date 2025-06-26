@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Background Color Changer</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Background Color Changer</h1>
+    <div class="buttons">
+      <button onclick="changeColor('red')">Red</button>
+      <button onclick="changeColor('blue')">Blue</button>
+      <button onclick="changeColor('green')">Green</button>
+      <button onclick="changeColor('random')">Random</button>
+    </div>
+  </div>
+  <script>
+
+    function changeColor(color){
+      let newColor;
+      if(color==='random'){
+        newColor=`#${Math.floor(Math.random()*1677215).toString(16)}`;
+      }
+      else{
+        newColor=color;
+      }
+      document.body.style.backgroundColor=newColor;
+    }
+  </script>
+</body>
+</html>
